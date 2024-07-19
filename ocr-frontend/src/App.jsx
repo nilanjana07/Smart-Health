@@ -1,7 +1,6 @@
-// src/App.js
-import React from 'react';
+
 import './App.css';
-import ImageUpload from './ImageUpload';
+import ImageUpload from './ImageUplod';
 
 function App() {
   return (
@@ -14,4 +13,5 @@ function App() {
 }
 
 export default App;
+
 
