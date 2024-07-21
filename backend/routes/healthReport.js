@@ -1,8 +1,9 @@
+// backend/routes/healthReport.js
 const express = require('express');
 const router = express.Router();
-const { createReport, getReports } = require('../controllers/healthReportController');
+const healthReportController = require('../controllers/healthReportController');
+const { authMiddleware } = require('../middleware/auth');
 
-router.post('/create', createReport);
-router.get('/all', getReports);
+router.post('/upload', authMiddleware, healthReportController.uploadHealthReport);
 
 module.exports = router;

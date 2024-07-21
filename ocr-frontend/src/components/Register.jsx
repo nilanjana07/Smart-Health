@@ -1,49 +1,60 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function Register() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/auth/register', { name, email, password });
+      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
+      console.log(response.data);
       navigate('/login');
     } catch (err) {
-      console.error(err);
+      setError('Registration failed. Please try again.');
     }
   };
 
   return (
     <div>
-      <h2>Register</h2>
+      <h1>Register</h1>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
+        </div>
         <button type="submit">Register</button>
       </form>
+      <p>Already have an account? <Link to="/login">Login</Link></p>
     </div>
   );
-};
+}
 
 export default Register;
+
+
+
