@@ -1,10 +1,20 @@
+// backend/models/HealthReport.js
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const healthReportSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    bloodPressure: String,
-    cholesterol: String,
-    // Add more fields as needed
-});
+const HealthReportSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  bloodPressure: {
+    type: String
+  },
+  cholesterol: {
+    type: String
+  },
+  // Add other health factors as needed
+}, { timestamps: true });
 
-module.exports = mongoose.model('HealthReport', healthReportSchema);
+module.exports = mongoose.model('HealthReport', HealthReportSchema);

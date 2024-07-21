@@ -33,8 +33,9 @@ app.post('/api/calculate-bmi', (req, res) => {
 });
 
 // Health Report Text Extraction and Notification
-app.post('/api/extract-text', (req, res) => {
+app.post('/api/extract-text', authMiddleware, (req, res) => {
     if (!req.files || !req.files.image) {
+        console.log('No file uploaded:', req.files); // Logging for debugging
         return res.status(400).send('No file uploaded.');
     }
     const image = req.files.image;

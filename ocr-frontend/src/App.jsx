@@ -1,33 +1,26 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import CalculateBmi from './components/CalculateBmi';
-import Dashboard from './components/Dashboard';
-import Login from './components/Login';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Register from './components/Register';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 import UploadImage from './components/UploadImage';
+import CalculateBmi from './components/CalculateBmi';
 
-const App = () => {
-  const isAuthenticated = !!localStorage.getItem('token');
-
+function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      {isAuthenticated ? (
-        <>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/calculate-bmi" element={<CalculateBmi />} />
-          <Route path="/upload-image" element={<UploadImage />} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </>
-      ) : (
-        <Route path="*" element={<Navigate to="/login" />} />
-      )}
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/upload-image" element={<UploadImage />} />
+        <Route path="/calculate-bmi" element={<CalculateBmi />} />
+        <Route path="*" element={<Navigate to="/register" />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
-
 
 
