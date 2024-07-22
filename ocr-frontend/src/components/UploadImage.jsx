@@ -1,39 +1,51 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import './UploadImage.css';
 
 const UploadImage = () => {
-  const [file, setFile] = useState(null);
-  const [result, setResult] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    setSelectedFile(e.target.files[0]);
   };
 
-  const handleSubmit = async (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
+    if (!selectedFile) {
+      setUploadStatus('Please select a file to upload');
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('image', selectedFile);
 
     try {
-      const response = await axios.post('/api/extract-text', formData, {
+      const response = await fetch('/api/health-report/upload', {
+        method: 'POST',
         headers: {
-          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
+        body: formData,
       });
-      setResult(response.data);
-    } catch (err) {
-      console.error(err);
+
+      if (response.ok) {
+        setUploadStatus('File uploaded successfully');
+      } else {
+        setUploadStatus('Failed to upload file');
+      }
+    } catch (error) {
+      setUploadStatus('An error occurred during file upload');
     }
   };
 
   return (
-    <div>
+    <div className="upload-image-container">
       <h2>Upload Health Report</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleUpload}>
         <input type="file" onChange={handleFileChange} />
         <button type="submit">Upload</button>
       </form>
-      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
+      {uploadStatus && <p>{uploadStatus}</p>}
     </div>
   );
 };

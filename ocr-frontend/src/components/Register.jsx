@@ -1,60 +1,46 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import './Register.css';
 
-function Register() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+const Register = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', formData);
-      console.log(response.data);
-      navigate('/login');
-    } catch (err) {
-      setError('Registration failed. Please try again.');
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
     }
+    // Handle registration logic here
   };
 
   return (
-    <div>
-      <h1>Register</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="register-container">
+      <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
-        </div>
+        <label>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <label>Confirm Password:</label>
+        <input
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
         <button type="submit">Register</button>
       </form>
-      <p>Already have an account? <Link to="/login">Login</Link></p>
     </div>
   );
-}
+};
 
 export default Register;
-
-
-

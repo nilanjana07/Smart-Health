@@ -1,0 +1,13 @@
+.dashboard-container {
+    text-align: center;
+    padding: 2em;
+  }
+  
+  .dashboard-container h1 {
+    color: #333;
+  }
+  
+  .dashboard-container p {
+    color: #666;
+  }
+  
