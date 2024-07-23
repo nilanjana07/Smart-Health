@@ -3,10 +3,10 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 require('dotenv').config();
-
 const authRoutes = require('./routes/auth');
 const healthReportRoutes = require('./routes/healthReport');
 const { authMiddleware } = require('./middleware/auth');
+const contactRoute = require('./routes/contactRoute'); // Updated import
 
 const app = express();
 
@@ -22,6 +22,7 @@ app.use('/uploads', express.static('uploads'));
 // Route setup
 app.use('/api/auth', authRoutes);
 app.use('/api/health-report', authMiddleware, healthReportRoutes);
+app.use('/api/contact', contactRoute);
 
 // BMI Calculation Route
 app.post('/api/calculate-bmi', (req, res) => {
@@ -38,3 +39,4 @@ const port = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => app.listen(port, () => console.log(`Server running on http://localhost:${port}`)))
     .catch(err => console.error('Database connection error:', err));
+
