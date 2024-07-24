@@ -1,24 +1,40 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 const Register = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
+    try {
+      await axios.post('http://localhost:5000/api/auth/register', {
+        name,
+        email,
+        password
+      });
+
+      navigate('/login');
+    } catch (error) {
+      setError('Registration failed');
     }
-    // Handle registration logic here
   };
 
   return (
     <div className="register-container">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
+        <label>Name:</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <label>Email:</label>
         <input
           type="email"
@@ -31,12 +47,7 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <label>Confirm Password:</label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+        {error && <p className="error">{error}</p>}
         <button type="submit">Register</button>
       </form>
     </div>
@@ -44,3 +55,4 @@ const Register = () => {
 };
 
 export default Register;
+
