@@ -7,13 +7,13 @@ import Register from './components/Register';
 import UploadImage from './components/UploadImage';
 import ContactForm from './components/ContactForm';
 import './App.css';
-
+import HomePage from './components/HomePage';
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          
+          <Route path="/home" element={<HomePage/>}/>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Dashboard />} />
