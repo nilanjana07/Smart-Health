@@ -1,59 +1,82 @@
 // src/components/ContactForm.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import './ContactForm.css'; // You can add specific styles for this component if needed
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [status, setStatus] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    name: '',
+    phone: '',
+    query: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/contact', {
-        name,
-        email,
-        message,
-      });
-      if (response.data.status === 'success') {
-        setStatus('Message Sent Successfully');
-      } else {
-        setStatus('Message Failed to Send');
-      }
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/contact`, formData);
+      alert(response.data.message);
     } catch (error) {
+      alert('Failed to send email.');
       console.error(error);
-      setStatus('Message Failed to Send');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="contact-form">
-      <h2>Contact Us</h2>
-      <input
-        type="text"
-        placeholder="Your Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <input
-        type="email"
-        placeholder="Your Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <textarea
-        placeholder="Your Message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        required
-      />
-      <button type="submit">Send</button>
-      {status && <p>{status}</p>}
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+      <div>
+        <label>Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Enter your name"
+          style={{ textTransform: 'capitalize' }}
+          required
+        />
+      </div>
+      <div>
+        <label>Phone:</label>
+        <input
+          type="text"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="Enter your phone number"
+          required
+        />
+      </div>
+      <div>
+        <label>Query:</label>
+        <textarea
+          name="query"
+          value={formData.query}
+          onChange={handleChange}
+          placeholder="Enter your query"
+          required
+        ></textarea>
+      </div>
+      <button type="submit">Submit</button>
     </form>
   );
 };
 
 export default ContactForm;
+

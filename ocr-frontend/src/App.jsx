@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Register from './components/Register';
 import UploadImage from './components/UploadImage';
+import ContactForm from './components/ContactForm';
 import './App.css';
 
 function App() {
@@ -12,11 +13,13 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/calculate-bmi" element={<CalculateBmi />} />
           <Route path="/upload-image" element={<UploadImage />} />
+          <Route path="/contact" element={<ContactForm />} /> {/* Added ContactForm route */}
         </Routes>
       </div>
     </Router>
@@ -24,6 +27,7 @@ function App() {
 }
 
 export default App;
+
 
 
 
